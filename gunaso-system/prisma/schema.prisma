@@ -1,0 +1,87 @@
+// Prisma schema for Gunaso API
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  CITIZEN
+  STAFF
+  ADMIN
+}
+
+enum TicketStatus {
+  NEW
+  ACKNOWLEDGED
+  IN_PROGRESS
+  RESOLVED
+  CLOSED
+  REOPENED
+}
+
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  password  String
+  fullName  String
+  role      Role     @default(CITIZEN)
+  wardId    Int?
+  ward      Ward?    @relation(fields: [wardId], references: [id])
+  tickets   Ticket[] @relation("CreatedTickets")
+  assigned  Ticket[] @relation("AssignedTickets")
+  comments  Comment[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Ward {
+  id       Int      @id @default(autoincrement())
+  code     String   @unique
+  name_en  String
+  name_np  String
+  users    User[]
+  tickets  Ticket[]
+}
+
+model Category {
+  id        Int      @id @default(autoincrement())
+  code      String   @unique
+  name_en   String
+  name_np   String
+  is_active Boolean  @default(true)
+  tickets   Ticket[]
+}
+
+model Ticket {
+  id           String       @id @default(uuid())
+  code         String       @unique
+  title        String
+  description  String
+  status       TicketStatus @default(NEW)
+  categoryId   Int
+  wardId       Int
+  createdById  String
+  assignedToId String?
+  category     Category     @relation(fields: [categoryId], references: [id])
+  ward         Ward         @relation(fields: [wardId], references: [id])
+  createdBy    User         @relation("CreatedTickets", fields: [createdById], references: [id])
+  assignedTo   User?        @relation("AssignedTickets", fields: [assignedToId], references: [id])
+  comments     Comment[]
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+  closedAt     DateTime?
+}
+
+model Comment {
+  id        String   @id @default(uuid())
+  ticketId  String
+  authorId  String
+  body      String
+  ticket    Ticket   @relation(fields: [ticketId], references: [id])
+  author    User     @relation(fields: [authorId], references: [id])
+  createdAt DateTime @default(now())
+}
