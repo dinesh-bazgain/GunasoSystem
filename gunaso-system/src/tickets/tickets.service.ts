@@ -13,7 +13,7 @@ export class TicketsService {
   constructor(private prisma: PrismaService) {}
 
   async create(createTicketDto: CreateTicketDto) {
-    const categoryId = createTicketDto.categoryId ?? 1; // default category ID
+    const categoryId = createTicketDto.categoryId ?? 1;
 
     const category = await this.prisma.category.findUnique({
       where: { id: categoryId },
