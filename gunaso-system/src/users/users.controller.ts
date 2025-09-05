@@ -6,6 +6,6 @@ export class UsersController {
   @UseGuards(JwtAuthGuard)
   @Get('me')
   getProfile(@Request() req) {
-    return req.user; // JWT payload
+    return req.user;
   }
 }
