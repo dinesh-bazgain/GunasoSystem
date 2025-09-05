@@ -7,9 +7,18 @@ import { WardsModule } from './wards/wards.module';
 import { TicketsModule } from './tickets/tickets.module';
 import { CommentsModule } from './comments/comments.module';
 import { PrismaModule } from './prisma/prisma.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
-  imports: [UsersModule, CategoriesModule, WardsModule, TicketsModule, CommentsModule, PrismaModule],
+  imports: [
+    UsersModule,
+    CategoriesModule,
+    WardsModule,
+    TicketsModule,
+    CommentsModule,
+    PrismaModule,
+    AuthModule,
+  ],
   controllers: [AppController],
   providers: [AppService],
 })
