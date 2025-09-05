@@ -29,6 +29,8 @@ model User {
   password  String
   fullName  String
   role      Role     @default(CITIZEN)
+  wardId    Int?
+  ward      Ward?    @relation(fields: [wardId], references: [id])
   tickets   Ticket[] @relation("CreatedTickets")
   assigned  Ticket[] @relation("AssignedTickets")
   comments  Comment[]
@@ -41,6 +43,7 @@ model Ward {
   code     String   @unique
   name_en  String
   name_np  String
+  users    User[]
   tickets  Ticket[]
 }
 
