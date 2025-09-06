@@ -6,7 +6,7 @@ import {
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
-import { PrismaService } from '../prisma/prisma.service'; // make sure you have PrismaService
+import { PrismaService } from '../prisma/prisma.service';
 
 @Injectable()
 export class AuthService {
@@ -15,18 +15,18 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
-  // Hash a password
+  //password hashing
   async hashPassword(password: string): Promise<string> {
     const salt = await bcrypt.genSalt();
     return bcrypt.hash(password, salt);
   }
 
-  // Compare password
+  // comapare hashed password
   async comparePasswords(password: string, hash: string): Promise<boolean> {
     return bcrypt.compare(password, hash);
   }
 
-  // Register a new user
+  // new user registration
   async register(data: { email: string; password: string; fullName: string }) {
     try {
       const hashedPassword = await this.hashPassword(data.password);
@@ -49,7 +49,6 @@ export class AuthService {
     }
   }
 
-  // Validate user credentials
   async validateUser(email: string, password: string) {
     const user = await this.prisma.user.findUnique({ where: { email } });
     if (!user) throw new UnauthorizedException('Invalid credentials');
@@ -64,7 +63,7 @@ export class AuthService {
     return user;
   }
 
-  // Generate JWT token
+  // JWT token
   async login(user: any) {
     const payload = { sub: user.id, email: user.email, role: user.role };
     return {

@@ -58,14 +58,14 @@ model Category {
 
 model Ticket {
   id           String       @id @default(uuid())
-  code         String       @unique
+  code         String?       @unique
   title        String
   description  String
   status       TicketStatus @default(NEW)
   categoryId   Int
   wardId       Int
-  createdById  String
-  assignedToId String?
+  createdById  String?
+  assignedToId String
   category     Category     @relation(fields: [categoryId], references: [id])
   ward         Ward         @relation(fields: [wardId], references: [id])
   createdBy    User         @relation("CreatedTickets", fields: [createdById], references: [id])
