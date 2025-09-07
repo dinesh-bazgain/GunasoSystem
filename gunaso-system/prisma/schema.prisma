@@ -64,8 +64,8 @@ model Ticket {
   status       TicketStatus @default(NEW)
   categoryId   Int
   wardId       Int
-  createdById  String?
-  assignedToId String
+  createdById  String
+  assignedToId String?
   category     Category     @relation(fields: [categoryId], references: [id])
   ward         Ward         @relation(fields: [wardId], references: [id])
   createdBy    User         @relation("CreatedTickets", fields: [createdById], references: [id])
