@@ -67,6 +67,8 @@ export class TicketsService {
       where: { id },
     });
     if (!ticket) throw new NotFoundException(`Ticket with ID ${id} not found`);
+
+    // if(requst.user.role === 'ADMIN') throw new ForbiddenException('You do not have permission to update this ticket');
     
     return this.prisma.ticket.update({
       where: { id },
